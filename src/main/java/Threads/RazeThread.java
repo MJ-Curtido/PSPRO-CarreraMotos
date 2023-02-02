@@ -4,8 +4,10 @@
  */
 package Threads;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 /**
@@ -13,29 +15,54 @@ import javax.swing.JProgressBar;
  * @author Dam
  */
 public class RazeThread extends Thread {
+
     private JProgressBar runner;
     private int timeSleep;
-    
-    public RazeThread(JProgressBar runner) {
+    private int vuelta;
+    private final int NUM_VUELTAS = 5;
+    private ArrayList<RazeThread> listaHilos;
+    private JLabel lblVueltas;
+    private JLabel lblGanador;
+
+    public RazeThread(JProgressBar runner, ArrayList<RazeThread> listaHilos,  JLabel lblVueltas, JLabel lblGanador) {
         this.runner = runner;
-        this.timeSleep = Math.round((float)(Math.random() * 10 + 10));
+        this.timeSleep = Math.round((float) (Math.random() * 70 + 10));
+        this.vuelta = 0;
+        this.listaHilos = listaHilos;
+        this.lblGanador = lblGanador;
+        this.lblVueltas = lblVueltas;
     }
-    
+
     @Override
     public void run() {
-        int min = runner.getMinimum();
-        int max = runner.getMaximum();
-        
-        for (int i = min; i < max; i++) {
-            runner.setValue(runner.getValue() + 1);
+        final int MIN_RUNNER = runner.getMinimum();
+        final int MAX_RUNNER = runner.getMaximum();
+
+        for (vuelta = 0; vuelta <= NUM_VUELTAS; vuelta++) {
+            runner.setValue(runner.getMinimum());
             runner.repaint();
-            try {
-                Thread.sleep(timeSleep);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RazeThread.class.getName()).log(Level.SEVERE, null, ex);
+            
+            this.lblVueltas.setText(vuelta + "/" + NUM_VUELTAS);
+            
+            for (int i = MIN_RUNNER; i < MAX_RUNNER; i++) {
+                runner.setValue(runner.getValue() + 1);
+                runner.repaint();
+                try {
+                    Thread.sleep(timeSleep);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(RazeThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                timeSleep = Math.round((float) (Math.random() * 70 + 10));
             }
-            timeSleep = Math.round((float)(Math.random() * 10 + 10));
+        }
+        
+        this.listaHilos.add(this);
+        
+        if (this.listaHilos.indexOf(this) == 0) {
+            this.lblGanador.setText("Ganador! :)");
+        }
+        else {
+            this.lblGanador.setText("Perdedor :(");
         }
     }
-    
 }

@@ -5,6 +5,7 @@
 package views;
 
 import Threads.RazeThread;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,6 +15,7 @@ public class InitialPanel extends javax.swing.JPanel {
     private MotorcycleFrame myFrame;
     private RazeThread runner1Thread;
     private RazeThread runner2Thread;
+    private ArrayList<RazeThread> listaHilos;
     
     /**
      * Creates new form PanelInicial
@@ -22,6 +24,7 @@ public class InitialPanel extends javax.swing.JPanel {
         initComponents();
         
         this.myFrame = myFrame;
+        this.listaHilos = new ArrayList<RazeThread>();
     }
 
     /**
@@ -39,6 +42,10 @@ public class InitialPanel extends javax.swing.JPanel {
         btnPause = new javax.swing.JButton();
         btnLeave = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        lblVueltas1 = new javax.swing.JLabel();
+        lblVueltas2 = new javax.swing.JLabel();
+        lblGanador1 = new javax.swing.JLabel();
+        lblGanador2 = new javax.swing.JLabel();
 
         btnStart.setText("Start");
         btnStart.addActionListener(new java.awt.event.ActionListener() {
@@ -64,15 +71,20 @@ public class InitialPanel extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("RAZE");
 
+        lblGanador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        lblGanador2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(186, 186, 186))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(113, 113, 113)
                         .addComponent(btnStart)
@@ -80,25 +92,45 @@ public class InitialPanel extends javax.swing.JPanel {
                         .addComponent(btnPause))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(181, 181, 181)
-                        .addComponent(btnLeave)))
+                        .addComponent(btnLeave))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblVueltas2)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblGanador2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblVueltas1)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblGanador1)))))
                 .addContainerGap(94, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(186, 186, 186))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(52, 52, 52)
-                    .addComponent(progressRunner1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(94, Short.MAX_VALUE)))
+                    .addComponent(progressRunner1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(118, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(119, 119, 119)
-                .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(119, 119, 119)
+                        .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblVueltas1)
+                            .addComponent(lblGanador1))
+                        .addGap(73, 73, 73)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblVueltas2)
+                            .addComponent(lblGanador2))))
                 .addGap(74, 74, 74)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStart)
@@ -115,8 +147,8 @@ public class InitialPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        runner1Thread = new RazeThread(progressRunner1);
-        runner2Thread = new RazeThread(progressRunner2);
+        runner1Thread = new RazeThread(progressRunner1, listaHilos, lblVueltas1, lblGanador1);
+        runner2Thread = new RazeThread(progressRunner2, listaHilos, lblVueltas2, lblGanador2);
         
         runner1Thread.start();
         runner2Thread.start();
@@ -136,6 +168,10 @@ public class InitialPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnPause;
     private javax.swing.JButton btnStart;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblGanador1;
+    private javax.swing.JLabel lblGanador2;
+    private javax.swing.JLabel lblVueltas1;
+    private javax.swing.JLabel lblVueltas2;
     private javax.swing.JProgressBar progressRunner1;
     private javax.swing.JProgressBar progressRunner2;
     // End of variables declaration//GEN-END:variables
