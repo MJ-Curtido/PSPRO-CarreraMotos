@@ -9,13 +9,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import views.InitialPanel;
 
 /**
  *
  * @author Dam
  */
 public class RazeThread extends Thread {
-
+    private InitialPanel panel;
     private JProgressBar runner;
     private int timeSleep;
     private int vuelta;
@@ -24,27 +25,32 @@ public class RazeThread extends Thread {
     private JLabel lblVueltas;
     private JLabel lblGanador;
 
-    public RazeThread(JProgressBar runner, ArrayList<RazeThread> listaHilos,  JLabel lblVueltas, JLabel lblGanador) {
+    public RazeThread(JProgressBar runner, ArrayList<RazeThread> listaHilos,  JLabel lblVueltas, JLabel lblGanador, InitialPanel panel) {
         this.runner = runner;
         this.timeSleep = Math.round((float) (Math.random() * 70 + 10));
         this.vuelta = 0;
         this.listaHilos = listaHilos;
         this.lblGanador = lblGanador;
         this.lblVueltas = lblVueltas;
+        this.panel = panel;
     }
 
     @Override
     public void run() {
+        iniciar();
+    }
+    
+    public synchronized void iniciar() {
         final int MIN_RUNNER = runner.getMinimum();
         final int MAX_RUNNER = runner.getMaximum();
 
-        for (vuelta = 0; vuelta <= NUM_VUELTAS; vuelta++) {
+        for (vuelta = 0; vuelta <= NUM_VUELTAS && !panel.getTerminar(); vuelta++) {
             runner.setValue(runner.getMinimum());
             runner.repaint();
             
             this.lblVueltas.setText(vuelta + "/" + NUM_VUELTAS);
             
-            for (int i = MIN_RUNNER; i < MAX_RUNNER; i++) {
+            for (int i = MIN_RUNNER; i < MAX_RUNNER && !panel.getTerminar(); i++) {
                 runner.setValue(runner.getValue() + 1);
                 runner.repaint();
                 try {
@@ -56,13 +62,18 @@ public class RazeThread extends Thread {
             }
         }
         
-        this.listaHilos.add(this);
+        if (!panel.getTerminar()) {
+            this.listaHilos.add(this);
         
-        if (this.listaHilos.indexOf(this) == 0) {
-            this.lblGanador.setText("Ganador! :)");
+            if (this.listaHilos.indexOf(this) == 0) {
+                this.lblGanador.setText("Ganador! :)");
+            }
+            else {
+                this.lblGanador.setText("Perdedor :(");
+            }
         }
         else {
-            this.lblGanador.setText("Perdedor :(");
+            panel.setTerminar(false);
         }
     }
 }

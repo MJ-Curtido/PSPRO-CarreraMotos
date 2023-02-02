@@ -6,6 +6,8 @@ package views;
 
 import Threads.RazeThread;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,6 +18,8 @@ public class InitialPanel extends javax.swing.JPanel {
     private RazeThread runner1Thread;
     private RazeThread runner2Thread;
     private ArrayList<RazeThread> listaHilos;
+    private Boolean detenido;
+    private Boolean terminar;
     
     /**
      * Creates new form PanelInicial
@@ -25,6 +29,8 @@ public class InitialPanel extends javax.swing.JPanel {
         
         this.myFrame = myFrame;
         this.listaHilos = new ArrayList<RazeThread>();
+        this.terminar = true;
+        this.detenido = false;
     }
 
     /**
@@ -147,15 +153,60 @@ public class InitialPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        runner1Thread = new RazeThread(progressRunner1, listaHilos, lblVueltas1, lblGanador1);
-        runner2Thread = new RazeThread(progressRunner2, listaHilos, lblVueltas2, lblGanador2);
-        
-        runner1Thread.start();
-        runner2Thread.start();
+        iniciarCarrera();
     }//GEN-LAST:event_btnStartActionPerformed
 
+    public void iniciarCarrera() {
+        if (getTerminar()) {
+            this.listaHilos = new ArrayList<RazeThread>();
+            lblVueltas1.setText("");
+            lblVueltas2.setText("");
+            lblGanador1.setText("");
+            lblGanador2.setText("");
+
+            this.setTerminar(false);
+            runner1Thread = new RazeThread(progressRunner1, listaHilos, lblVueltas1, lblGanador1, this);
+            runner2Thread = new RazeThread(progressRunner2, listaHilos, lblVueltas2, lblGanador2, this);
+
+            runner1Thread.start();
+            runner2Thread.start();
+        }
+        else {
+            try {
+                setTerminar(true);
+                Thread.sleep(70);
+                iniciarCarrera();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(InitialPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public Boolean getDetenido() {
+        return this.detenido;
+    }
+    
+    public void setDetenido(Boolean value) {
+        this.detenido = value;
+    }
+    
+    public Boolean getTerminar() {
+        return this.terminar;
+    }
+    
+    public void setTerminar(Boolean value) {
+        this.terminar = value;
+    }
+    
     private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
-        
+        if (this.getDetenido()) {
+            btnPause.setText("Continue");
+            this.setDetenido(false);
+        }
+        else {
+            btnPause.setText("Pause");
+            this.setDetenido(true);
+        }
     }//GEN-LAST:event_btnPauseActionPerformed
 
     private void btnLeaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLeaveActionPerformed
