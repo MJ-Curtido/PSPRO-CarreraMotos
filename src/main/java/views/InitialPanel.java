@@ -14,23 +14,30 @@ import java.util.logging.Logger;
  * @author Dam
  */
 public class InitialPanel extends javax.swing.JPanel {
+
     private MotorcycleFrame myFrame;
     private RazeThread runner1Thread;
     private RazeThread runner2Thread;
     private ArrayList<RazeThread> listaHilos;
-    private Boolean detenido;
     private Boolean terminar;
-    
+
     /**
      * Creates new form PanelInicial
      */
     public InitialPanel(MotorcycleFrame myFrame) {
         initComponents();
-        
+
         this.myFrame = myFrame;
         this.listaHilos = new ArrayList<RazeThread>();
         this.terminar = true;
-        this.detenido = false;
+
+        lblVueltas1.setText("");
+        lblVueltas2.setText("");
+        lblGanador1.setText("");
+        lblGanador2.setText("");
+
+        lblAccidente1.setVisible(false);
+        lblAccidente2.setVisible(false);
     }
 
     /**
@@ -48,10 +55,24 @@ public class InitialPanel extends javax.swing.JPanel {
         btnPause = new javax.swing.JButton();
         btnLeave = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        lblAccidente1 = new javax.swing.JLabel();
+        lblAccidente2 = new javax.swing.JLabel();
         lblVueltas1 = new javax.swing.JLabel();
         lblVueltas2 = new javax.swing.JLabel();
         lblGanador1 = new javax.swing.JLabel();
         lblGanador2 = new javax.swing.JLabel();
+
+        progressRunner2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                progressRunner2MouseClicked(evt);
+            }
+        });
+
+        progressRunner1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                progressRunner1MouseClicked(evt);
+            }
+        });
 
         btnStart.setText("Start");
         btnStart.addActionListener(new java.awt.event.ActionListener() {
@@ -77,78 +98,95 @@ public class InitialPanel extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("RAZE");
 
-        lblGanador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAccidente1.setText("Ha tenido un accidente :(");
 
-        lblGanador2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAccidente2.setText("Ha tenido un accidente :(");
+
+        lblVueltas1.setText("jLabel2");
+
+        lblVueltas2.setText("jLabel2");
+
+        lblGanador1.setText("jLabel2");
+
+        lblGanador2.setText("jLabel2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(186, 186, 186))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
-                        .addComponent(btnStart)
-                        .addGap(72, 72, 72)
-                        .addComponent(btnPause))
+                        .addGap(170, 170, 170)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(181, 181, 181)
-                        .addComponent(btnLeave))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblVueltas2)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblGanador2))
+                                .addGap(49, 49, 49)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnStart)
+                                        .addGap(72, 72, 72)
+                                        .addComponent(btnPause))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(68, 68, 68)
+                                        .addComponent(btnLeave))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblVueltas1)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblGanador1)))))
-                .addContainerGap(94, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(52, 52, 52)
-                    .addComponent(progressRunner1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(118, Short.MAX_VALUE)))
+                                .addGap(95, 95, 95)
+                                .addComponent(lblAccidente2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(97, 97, 97)
+                                .addComponent(lblAccidente1))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(lblVueltas1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblGanador2))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(progressRunner1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(lblVueltas2)
+                                    .addGap(36, 36, 36)
+                                    .addComponent(lblGanador1))))))
+                .addGap(0, 66, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(57, 57, 57)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(lblAccidente1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblVueltas1)
-                            .addComponent(lblGanador1))
-                        .addGap(73, 73, 73)
+                        .addComponent(progressRunner1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblVueltas2)
-                            .addComponent(lblGanador2))))
-                .addGap(74, 74, 74)
+                            .addComponent(lblGanador1))
+                        .addGap(40, 40, 40)))
+                .addComponent(lblAccidente2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(progressRunner2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblVueltas1)
+                            .addComponent(lblGanador2))
+                        .addGap(61, 61, 61)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStart)
                     .addComponent(btnPause))
                 .addGap(26, 26, 26)
                 .addComponent(btnLeave)
-                .addContainerGap(128, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(105, 105, 105)
-                    .addComponent(progressRunner1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(362, Short.MAX_VALUE)))
+                .addGap(82, 82, 82))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -165,13 +203,12 @@ public class InitialPanel extends javax.swing.JPanel {
             lblGanador2.setText("");
 
             this.setTerminar(false);
-            runner1Thread = new RazeThread(progressRunner1, listaHilos, lblVueltas1, lblGanador1, this);
-            runner2Thread = new RazeThread(progressRunner2, listaHilos, lblVueltas2, lblGanador2, this);
+            runner1Thread = new RazeThread(progressRunner1, listaHilos, lblVueltas1, lblGanador1, lblAccidente1, this);
+            runner2Thread = new RazeThread(progressRunner2, listaHilos, lblVueltas2, lblGanador2, lblAccidente2, this);
 
             runner1Thread.start();
             runner2Thread.start();
-        }
-        else {
+        } else {
             try {
                 setTerminar(true);
                 Thread.sleep(70);
@@ -181,31 +218,28 @@ public class InitialPanel extends javax.swing.JPanel {
             }
         }
     }
-    
-    public Boolean getDetenido() {
-        return this.detenido;
-    }
-    
-    public void setDetenido(Boolean value) {
-        this.detenido = value;
-    }
-    
+
     public Boolean getTerminar() {
         return this.terminar;
     }
-    
+
     public void setTerminar(Boolean value) {
         this.terminar = value;
     }
-    
+
     private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
-        if (this.getDetenido()) {
-            btnPause.setText("Continue");
-            this.setDetenido(false);
+        if (runner1Thread.getDetenido()) {
+            runner1Thread.setDetenidoFalse();
+        } else {
+            runner1Thread.setDetenidoTrue();
         }
-        else {
+
+        if (runner2Thread.getDetenido()) {
             btnPause.setText("Pause");
-            this.setDetenido(true);
+            runner2Thread.setDetenidoFalse();
+        } else {
+            btnPause.setText("Continue");
+            runner2Thread.setDetenidoTrue();
         }
     }//GEN-LAST:event_btnPauseActionPerformed
 
@@ -213,12 +247,34 @@ public class InitialPanel extends javax.swing.JPanel {
         System.exit(0);
     }//GEN-LAST:event_btnLeaveActionPerformed
 
+    private void progressRunner1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_progressRunner1MouseClicked
+        if (!lblAccidente1.isVisible() && !lblAccidente2.isVisible()) {
+            if (runner1Thread.getDetenido()) {
+                runner1Thread.setDetenidoFalse();
+            } else {
+                runner1Thread.setDetenidoTrue();
+            }
+        }
+    }//GEN-LAST:event_progressRunner1MouseClicked
+
+    private void progressRunner2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_progressRunner2MouseClicked
+        if (!lblAccidente1.isVisible() && !lblAccidente2.isVisible()) {
+            if (runner2Thread.getDetenido()) {
+                runner2Thread.setDetenidoFalse();
+            } else {
+                runner2Thread.setDetenidoTrue();
+            }
+        }
+    }//GEN-LAST:event_progressRunner2MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLeave;
     private javax.swing.JButton btnPause;
     private javax.swing.JButton btnStart;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblAccidente1;
+    private javax.swing.JLabel lblAccidente2;
     private javax.swing.JLabel lblGanador1;
     private javax.swing.JLabel lblGanador2;
     private javax.swing.JLabel lblVueltas1;
